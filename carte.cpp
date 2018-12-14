@@ -12,12 +12,12 @@ namespace laby
 
     void carte::lire()
     {
-        std::ifstream file;
-        file.open(m_nomFichier);
+        std::ifstream fichier;
+        fichier.open(m_nomFichier);
         std::string ligne;
 
         int nbArrive = 0, nbDepart = 0;
-        while(std::getline(file, ligne))
+        while(std::getline(fichier, ligne))
         {
             m_carte.push_back(std::vector<int>());
             for(char c : ligne)
@@ -52,31 +52,26 @@ namespace laby
         return m_estValide;
     }
 
-    std::vector<std::vector<int>> carte::getCarte() const
+	bool carte::estUnMur(const geom::point &p) const
+	{
+		bool estMur = true;
+		try
+		{
+			estMur = m_carte.at(p.x()).at(p.y()) != typeCase::MUR;
+		}
+		catch(std::out_of_range &e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+
+		return estMur;
+	}
+
+    const std::vector<std::vector<int>>& carte::getCarte() const
     {
         return m_carte;
     }
 
-    void carte::afficherGraphique()
-    {
-        for(size_t i = 0; i < m_carte.size(); i++)
-        {
-            for(size_t j = 0; j < m_carte[i].size(); j++)
-            {
-                if(m_carte[i][j] == typeCase::MUR)
-                    setfillstyle(SOLID_FILL, WHITE);
-                else if(m_carte[i][j] == typeCase::DEPART)
-                    setfillstyle(SOLID_FILL, BLUE);
-                else if(m_carte[i][j] == typeCase::ARRIVE)
-                    setfillstyle(SOLID_FILL, RED);
-                else
-                    setfillstyle(EMPTY_FILL, BLACK);
-
-                rectangle(j*TAILLE_CASE, i*TAILLE_CASE, j*TAILLE_CASE + TAILLE_CASE, i*TAILLE_CASE + TAILLE_CASE);
-                floodfill(j*TAILLE_CASE+1, i*TAILLE_CASE+1, getmaxcolor());
-            }
-        }
-    }
 
     std::ostream& operator<<(std::ostream &ost, const carte &c)
     {
