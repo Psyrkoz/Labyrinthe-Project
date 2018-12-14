@@ -17,4 +17,9 @@ namespace geom
     {
         return m_y;
     }
+
+    void point::move(int x, int y)
+    {
+        m_x = x; m_y = y;
+    }
 }

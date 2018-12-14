@@ -27,6 +27,16 @@ namespace geom
                 @return coordonnée Y
             */
             int y() const;
+
+            /**
+                Positionne le point a (x,y)
+                @param x - Coordonnée en X
+                @param y - Coordonnée en Y
+            */
+            void move(int x, int y);
+
+        private:
+            int m_x, m_y;
     };
 }
 
