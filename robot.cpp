@@ -4,18 +4,18 @@
 
 namespace laby
 {
-    robot::robot(const laby::carte &c)
+    robot::robot(const laby::carte &c, int direction) : m_direction{direction}
     {
         setDepart(c);
     }
 
-    bool robot::setDepart(const laby::carte &c)
+    void robot::setDepart(const laby::carte &c)
     {
         if(c.estValide())
         {
             std::vector<std::vector<int>> map = c.getCarte();
-            int i = 0;
-            int j = 0;
+            size_t i = 0;
+            size_t j = 0;
             while(i < map.size() && map[i][j] != typeCase::DEPART)
             {
                 j++;
@@ -26,7 +26,7 @@ namespace laby
                 }
             }
 
-            m_position.move(j*laby::carte::TAILLE_CASE + laby::carte::TAILLE_CASE / 2, i*laby::carte::TAILLE_CASE + laby::carte::TAILLE_CASE / 2);
+            m_position.move(j, i);
         }
     }
 
@@ -34,4 +34,28 @@ namespace laby
     {
         return m_position;
     }
+
+    int robot::direction() const
+    {
+        return m_direction;
+    }
+
+	void robot::position(const geom::point &p)
+	{
+		m_position = p;
+	}
+
+	void robot::tournerDroite()
+	{
+        m_direction++;
+        if(m_direction > 3) // Si on depasse (par le haut) la 4eme direction possible
+            m_direction = 0;
+	}
+
+	void robot::tournerGauche()
+	{
+	    m_direction--;
+	    if(m_direction < 0) // Si on depasse (par le bas) la 4eme direction possible
+            m_direction = 3;
+	}
 }
